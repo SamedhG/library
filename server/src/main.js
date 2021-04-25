@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client')
 const express = require('express')
-
+const cors = require('cors');
 const prisma = new PrismaClient()
 const app = express()
 
@@ -9,6 +9,7 @@ const authorController = require('./controllers/author_controller');
 const bookController = require('./controllers/book_controller');
 
 app.use(express.json())
+app.use(cors())
 app.use('/member', memberController)
 app.use('/author', authorController)
 app.use('/book', bookController)

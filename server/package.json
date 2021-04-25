@@ -4,7 +4,7 @@
     "description": "",
     "main": "src/main.js",
     "scripts": {
-        "start" : "node .",
+        "start": "node .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "",
@@ -14,6 +14,7 @@
     },
     "dependencies": {
         "@prisma/client": "^2.21.2",
+        "cors": "^2.8.5",
         "express": "^4.17.1"
     }
 }
