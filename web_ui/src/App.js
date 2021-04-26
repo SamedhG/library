@@ -6,10 +6,11 @@ import BookList from './Books/List'
 import BookForm from './Books/Form'
 import AuthorList from './Authors/List'
 import AuthorForm from './Authors/Form'
-
+import Nav from './Nav'
 function App() {
   return (
     <>
+        <Nav />
         <Switch>
             <Route path="/" exact>
             Home Page Goes here
