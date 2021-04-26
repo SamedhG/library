@@ -1,18 +1,19 @@
 import { Container, Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react'
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, Link } from 'react-router-dom';
 import { api_get, api_post, api_patch } from '../api';
 
 export default function BookForm() {
     let history = useHistory();
     const [book, setBook] = useState({ title: "", authorId: -1})
-
+    const [authors, setAuthors] = useState([])
     const id = parseInt(useParams().id);
 
     useEffect(() => {
         if(!isNaN(id)) {
             api_get(`/book/${id}`).then(setBook)
         }
+        api_get("/author").then(setAuthors)
     }, [id])
 
     function update(field, ev) {
@@ -40,7 +41,12 @@ export default function BookForm() {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Author</Form.Label>
-                    <Form.Control type="number" value={book.authorId} onChange={(ev)=> update("authorId", ev)} />
+                    <Form.Control as="select" value={book.authorId} onChange={(ev) => update("authorId", ev)} custom>
+                        {authors.map((a) => (
+                            <option key={a.id} value={a.id}>{a.name}</option>
+                        ))}
+                    </Form.Control>
+                    <Link to={`/author/${book.authorId}`} className="btn btn-primary">Edit Author</Link>
                 </Form.Group>
                 <br />
                 <Button onClick={submit}>{isNaN(id) ? "Create" : "Update" }</Button>

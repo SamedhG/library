@@ -1,18 +1,23 @@
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, ListGroup } from 'react-bootstrap';
 import { useState, useEffect } from 'react'
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, Link } from 'react-router-dom';
 import { api_get, api_post, api_patch } from '../api';
 
 export default function AuthorForm() {
     let history = useHistory();
     const [author, setAuthor] = useState({name: ""})
-
+    const [books, setBooks] = useState([])
     const id = parseInt(useParams().id);
 
     useEffect(() => {
         if(!isNaN(id)) {
-            api_get(`/author/${id}`).then(setAuthor)
+            api_get(`/author/${id}`)
+                .then((a) => {
+                    setAuthor(a)
+                    api_get("/book").then(b => setBooks(b.filter(x => x.authorId == a.id)))
+                })
         }
+
     }, [id])
 
     function update(field, ev) {
@@ -40,6 +45,19 @@ export default function AuthorForm() {
                 <br />
                 <Button onClick={submit}>{isNaN(id) ? "Create" : "Update" }</Button>
             </Form>
+            <br  />
+            <h2> Their Books </h2>
+        <ListGroup>
+            { books && books.map((a, i) => (
+                <ListGroup.Item key={i} className="d-flex justify-content-between">
+                    { a.title}
+                    <span>
+                        <Link to={`/book/${a.id}`} className="btn btn-primary"> 
+                            Edit
+                        </Link>
+                    </span>
+                </ListGroup.Item>))}
+        </ListGroup>
         </Container>
     );
 }
